@@ -5,12 +5,14 @@ import os
 import gzip
 import sftp_utils as sftp
 import paramiko
+import csv
 from pathlib import Path
 from Creds import liveramp_feed
-
-file_name = 'liveramp_file.csv.gz'
+from datetime import datetime
+today_date = datetime.today().strftime('%m%d%Y')
+file_name = 'liveramp_BuildCustomer'+'_' +today_date+'.csv.gz'
 local_dir_fq = os.path.join(Path().absolute(), file_name)
-remote_dir_fq = '/uploads/build_com_onboarding/liveramp_file.csv.gz'
+remote_dir_fq = os.path.join('/uploads/build_com_onboarding',file_name)
 liveramp = liveramp_feed()
 username = liveramp.username
 hostname = liveramp.hostname
@@ -20,7 +22,8 @@ username = 'Reporter'
 
 def data_extract_to_csv(query, username, local_dir_fq, use_pyodbc=True):
     DF = DBUtilities.query_data_return_pandas_df(query, username , use_pyodbc)
-    DF.to_csv(local_dir_fq,header=True, index =False, compression = 'gzip')
+    DF.CUSTOMERID = DF.CUSTOMERID.astype(str)
+    DF.to_csv(local_dir_fq,header=True,  quotechar='"', quoting=csv.QUOTE_NONNUMERIC, index =False, compression = 'gzip')
     print("Database file successfully exported")
 
 def data_transfer_to_sftp_client(username, hostname, password, local_dir_fq, remote_dir_fq):
@@ -36,12 +39,12 @@ def main():
     except Exception as e:
         raise
 
-    """finally:
+    finally:
         try:
             os.remove(local_dir_fq)
         except WindowsError as e:
             pass
-"""
+
 if __name__ == '__main__':
         main()
         print("Script completed.")
