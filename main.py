@@ -15,7 +15,7 @@ liveramp = liveramp_feed()
 username = liveramp.username
 hostname = liveramp.hostname
 password = liveramp.password
-query = 'select * from  [dw].[liveRampFeed](default)'
+query = 'select * from  datamart.[dw].[liveRampFeed](default)'
 username = 'Reporter'
 
 def data_extract_to_csv(query, username, local_dir_fq, use_pyodbc=True):
@@ -32,16 +32,16 @@ def data_transfer_to_sftp_client(username, hostname, password, local_dir_fq, rem
 def main():
     try:
       data_extract_to_csv(query, username,local_dir_fq)
-      data_transfer_to_sftp_client(username, hostname, password, local_dir_fq, remote_dir_fq)
+      #data_transfer_to_sftp_client(username, hostname, password, local_dir_fq, remote_dir_fq)
     except Exception as e:
         raise
 
-    finally:
+    """finally:
         try:
             os.remove(local_dir_fq)
         except WindowsError as e:
             pass
-
+"""
 if __name__ == '__main__':
         main()
         print("Script completed.")
