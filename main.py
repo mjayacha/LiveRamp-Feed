@@ -10,7 +10,7 @@ from pathlib import Path
 from Creds import liveramp_feed
 from datetime import datetime
 today_date = datetime.today().strftime('%m%d%Y')
-file_name = 'liveramp_BuildCustomer'+'_' +today_date+'.csv.gz'
+file_name = 'LiveRamp_BuildCustomer'+'_' +today_date+'.csv.gz'
 local_dir_fq = os.path.join(Path().absolute(), file_name)
 remote_dir_fq = os.path.join('/uploads/build_com_onboarding',file_name)
 liveramp = liveramp_feed()
