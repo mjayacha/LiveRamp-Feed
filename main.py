@@ -9,6 +9,9 @@ import csv
 from pathlib import Path
 from Creds import liveramp_feed
 from datetime import datetime
+import DWEmail
+from dw_logging import prnt as prnt, configure_logging, get_log_file, global_status_log
+
 today_date = datetime.today().strftime('%m%d%Y')
 file_name = 'LiveRamp_BuildCustomer'+'_' +today_date+'.csv.gz'
 local_dir_fq = os.path.join(Path().absolute(), file_name)
@@ -31,10 +34,11 @@ def data_transfer_to_sftp_client(username, hostname, password, local_dir_fq, rem
         sftp_con.put(local_dir_fq, remote_dir_fq)
     print("Database file successfully exported to SFTP client")
 
+@DWEmail.email_on_error(_log_fullpath=get_log_file())
 def main():
     try:
       data_extract_to_csv(query, username,local_dir_fq)
-      data_transfer_to_sftp_client(username, hostname, password, local_dir_fq, remote_dir_fq)
+      #data_transfer_to_sftp_client(username, hostname, password, local_dir_fq, remote_dir_fq)
     except Exception as e:
         raise
 
