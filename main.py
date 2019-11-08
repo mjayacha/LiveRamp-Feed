@@ -22,8 +22,7 @@ username = 'Reporter'
 
 def data_extract_to_csv(query, username, local_dir_fq, use_pyodbc=True):
     DF = DBUtilities.query_data_return_pandas_df(query, username , use_pyodbc)
-    DF.CUSTOMERID = DF.CUSTOMERID.astype(str)
-    DF.to_csv(local_dir_fq,header=True,  quotechar='"', quoting=csv.QUOTE_NONNUMERIC, index =False, compression = 'gzip')
+    DF.to_csv(local_dir_fq,header=True,  quotechar='"', quoting=csv.QUOTE_ALL, index =False, compression = 'gzip')
     print("Database file successfully exported")
 
 def data_transfer_to_sftp_client(username, hostname, password, local_dir_fq, remote_dir_fq):
