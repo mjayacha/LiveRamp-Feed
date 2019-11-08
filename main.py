@@ -38,7 +38,7 @@ def data_transfer_to_sftp_client(username, hostname, password, local_dir_fq, rem
 def main():
     try:
       data_extract_to_csv(query, username,local_dir_fq)
-      #data_transfer_to_sftp_client(username, hostname, password, local_dir_fq, remote_dir_fq)
+      data_transfer_to_sftp_client(username, hostname, password, local_dir_fq, remote_dir_fq)
     except Exception as e:
         raise
 
