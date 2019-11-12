@@ -1,3 +1,4 @@
+#! python3
 import pyodbc
 import DBUtilities
 import pandas
@@ -26,16 +27,25 @@ password = liveramp.password
 query = 'select * from  datamart.[dw].[liveRampFeed](default)'
 username = 'Reporter'
 
+#######################################################################################################################
+
+
 def data_extract_to_csv(query, username, local_dir_fq, use_pyodbc=True):
     DF = DBUtilities.query_data_return_pandas_df(query, username , use_pyodbc)
     DF.to_csv(local_dir_fq,header=True,  quotechar='"', quoting=csv.QUOTE_ALL, index =False, compression = 'gzip')
     prnt("Database file successfully exported")
+
+#######################################################################################################################
+
 
 def data_transfer_to_sftp_client(username, hostname, password, local_dir_fq, remote_dir_fq):
 
     with sftp.SFTPCon(username, hostname, password) as sftp_con:
         sftp_con.put(local_dir_fq, remote_dir_fq)
     prnt("Database file successfully exported to SFTP client")
+
+#######################################################################################################################
+
 
 @DWEmail.email_on_error(_log_fullpath=get_log_file())
 def main():
@@ -50,6 +60,9 @@ def main():
             os.remove(local_dir_fq)
         except WindowsError as e:
             pass
+
+#######################################################################################################################
+
 
 if __name__ == '__main__':
         main()
